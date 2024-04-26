@@ -19,7 +19,7 @@ function LEFT_run(){
 			LEFT_flash "$IMAGE_PART_MOUNT_IMG"
 		else
 			echo "$LEFT_PREFIX image file not found, source umounting $1"
-			umount "$IMAGE_PART_MOUNT"
+			umount "$IMAGE_PART_MOUNT" "$1"
 			trap - INT HUP QUIT TERM
 			echo "$LEFT_PREFIX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 			echo "$LEFT_PREFIX source umounted $1, image not found"
@@ -62,7 +62,7 @@ function LEFT_flash(){
 	wait $image_flash_pid
 
 	if [ $? -eq 0 ]; then
-		echo "$LEFT_PREFIX image flashing completed, source unmounting $1"
+		echo "$LEFT_PREFIX image flashing completed, source unmounting $2"
 		umount "$IMAGE_PART_MOUNT"
 		if [ "$IMAGE_EXPAND" -eq 1 ]; then
 			echo "$LEFT_PREFIX image expand start"
@@ -74,7 +74,7 @@ function LEFT_flash(){
 		read -n 1 -p "Press any key to shutdown."
 		poweroff
 	else
-		echo "$LEFT_PREFIX image flashing error $?, source unmounting $1"
+		echo "$LEFT_PREFIX image flashing error $?, source unmounting $2"
 		umount "$IMAGE_PART_MOUNT"
 		trap - INT HUP QUIT TERM
 		echo "$LEFT_PREFIX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
